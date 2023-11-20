@@ -1,0 +1,609 @@
+-------------初始化操作-------------
+(1).简介：在本地使用git init建立了一个仓库A。现在需要把本地的A和远程仓库建立连接，并且保持同步。
+第一步：git init：
+初始化一个本地仓库
+mkdir work
+cd work
+git init
+git add .
+git commit -m 'add files'
+然后开始在这里写自己的代码。
+
+第二步：在github新建一个仓库
+
+第三步：让本地仓库和远程仓库建立连接
+git remote add origin +  //远程仓库地址
+eg:git remote add origin http://10.0.55.82/bigdata/new_mot.git
+
+如果报错：远程仓库已经存在，可以用
+git remote rm origin
+再
+git remote add origin   +   //github仓库地址
+就不会报错了！
+
+第四步：
+git push origin master
+
+至此，本地代码和远程代码就建立连接完毕
+----------本地项目关联远程的几种方式-------------
+1.Git global setup
+git config --global user.name "刘威"
+git config --global user.email "liuwei946@crnet.com.hk"
+
+2.Create a new repository
+git clone https://git-crn.huaruntong.cn/crn-bigdata/crt-hotel-front.git
+cd crt-hotel-front
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin master
+
+3.Push an existing folder
+cd existing_folder
+git init
+git remote add origin https://git-crn.huaruntong.cn/crn-bigdata/crt-hotel-front.git
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+
+4.Push an existing Git repository
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin https://git-crn.huaruntong.cn/crn-bigdata/crt-hotel-front.git
+git push -u origin --all
+git push -u origin --tags
+
+-------------常用命令---------------
+1.git config
+[用法：git config –global user.name “name]”
+[用法：git config –global user.email “email address]”
+该命令将分别设置提交代码的用户名和电子邮件地址。
+
+2.git init
+用法：git init [repository name]
+该命令可用于创建一个新的代码库。
+
+3.git clone
+用法：git clone [url]
+该命令可用于通过指定的URL获取一个代码库。
+
+4.git add
+用法：git add [file]
+该命令可以将一个文件添加至stage(暂存区)。
+
+5.git commit
+用法：git commit -m “[ Type in the commit message]”
+该命令可以在版本历史记录中永久记录文件。
+
+6.git diff
+
+#该命令可以显示尚未添加到stage的文件的变更。
+git diff
+
+#该命令可以显示添加到stage的文件与当前最新版本之间的差异。
+git diff –staged 
+
+#该命令可以显示两个分支之间的差异。
+git diff [first branch] [second branch] 
+
+7.git reset
+#该命令将从stage中撤出指定的文件，但可以保留文件的内容。
+git reset [file]
+
+#该命令可以撤销指定提交之后的所有提交，并在本地保留变更。
+git reset [commit]
+
+#该命令将丢弃所有的历史记录，并回滚到指定的提交。
+git reset –hard [commit]
+
+8.git status
+用法：git status
+该命令将显示所有需要提交的文件。
+
+9.git rm
+用法：git rm [file]
+该命令将删除工作目录中的文件，并将删除动作添加到stage。
+
+10.git log
+#该命令可用于显示当前分支的版本历史记录。
+git log
+
+#该命令可用于显示某个文件的版本历史记录，包括文件的重命名。
+git log –follow[file]
+
+11.git show
+用法：git show [commit]
+该命令经显示指定提交的元数据以及内容变更。
+
+12.git tag
+用法：git tag [commitID]
+该命令可以给指定的提交添加标签。
+
+13.git branch
+#该命令将显示当前代码库中所有的本地分支。
+git branch
+
+#该命令将创建一个分支。
+git branch [branch name]
+
+#该命令将删除指定的分支。
+git branch -d [branch name]
+
+14.git checkout
+#通过该命令切换分支。
+git checkout [branch name]
+
+#通过该命令创建一个分支，并切换到新分支上。
+git checkout -b [branch name]
+
+15.git merge
+用法：git merge [branch name]
+该命令可以将指定分支的历史记录合并到当前分支。
+
+16.git remote
+用法：git remote add [variable name] [Remote Server Link]
+你可以通过该命令将本地的代码库连接到远程服务器。
+
+17.git push
+#该命令可以将主分支上提交的变更发送到远程代码库。
+git push [variable name] master
+
+#该命令可以将指定分支上的提交发送到远程代码库。
+git push [variable name] [branch]
+
+#该命令可以将所有分支发送到远程代码库。
+git push –all [variable name]
+
+#该命令可以删除远程代码库上的一个分支。
+git push [variable name] :[branch name]
+
+18.git pull
+用法：git pull [Repository Link]
+该命令将获取远程服务器上的变更，并合并到你的工作目录。
+
+19.git stash
+#该命令将临时保存所有修改的文件。
+git stash save
+
+#该命令将显示stash的所有变更。
+git stash list
+
+#该命令将丢弃最近一次stash的变更。
+git stash drop
+
+20.git rebase (参考：https://www.jianshu.com/p/4a8f4af4e803)
+不要通过rebase对任何已经提交到公共仓库中的commit进行修改（你自己一个人玩的分支除外）
+1.合并多个commit为一个完整commit
+当我们在本地仓库中提交了多次，在我们把本地提交push到公共仓库中之前，为了让提交记录更简洁明了，我们希望把如下分支B、C、D三个提交记录合并为一个完整的提交，然后再push到公共仓库。
+git rebase -i  [startpoint]  [endpoint]：-i的意思是--interactive，即弹出交互式的界面让用户编辑完成合并操作，
+[startpoint] [endpoint]则指定了一个编辑区间，如果不指定[endpoint]，则该区间的终点默认是当前分支HEAD所指向的commit(注：该区间指定的是一个前开后闭的区间)。
+2.将某一段commit粘贴到另一个分支上：
+当我们项目中存在多个分支，有时候我们需要将某一个分支中的一段提交同时应用到其他分支中：
+git rebase   [startpoint]   [endpoint]  --onto  [branchName]:注意[startpoint][endpoint]前开后闭
+步骤：
+1.先将develop的几次提交copy到master分支：
+git  rebase   90bc0045b^   5de0da9f2   --onto master
+2.此时，当前HEAD处于游离状态（HEAD必须和某个分支指向同样的commit-id）。
+需要切换到master，将master所指向的提交id设置为当前HEAD所指向的提交id
+git checkout master
+git reset --hard  0c72e64
+
+举个栗子:
+假设Git目前只有一个分支master。开发人员的工作流程是
+git clone master branch
+在自己本地checkout -b local创建一个本地开发分支
+在本地的开发分支上开发和测试
+阶段性开发完成后（包含功能代码和单元测试），可以准备提交代码
+    首先切换到master分支，git pull拉取最新的分支状态
+    然后切回local分支
+    通过git rebase -i 将本地的多次提交合并为一个，以简化提交历史。本地有多个提交时,如果不进行这一步,在git rebase master时会多次解决冲突(最坏情况下,每一个提交都会相应解决一个冲突)
+    git rebase master 将master最新的分支同步到本地，这个过程可能需要手动解决冲突(如果进行了上一步的话,只用解决一次冲突)
+    然后切换到master分支，git merge将本地的local分支内容合并到master分支
+    git push将master分支的提交上传
+git checkout master
+git pull
+git checkout local
+git rebase -i HEAD~2  //合并提交 --- 2表示合并两个
+git rebase master---->解决冲突--->git rebase --continue
+git checkout master
+git merge local
+git push
+
+
+
+21.git cherry-pick <commitHash>
+git cherry-pick命令的作用，就是将指定的提交（commit）应用于其他分支。
+对于多分支的代码库，将代码从一个分支转移到另一个分支是常见需求。
+这时分两种情况:
+一种情况是，你需要另一个分支的所有代码变动，那么就采用合并（git merge）。
+另一种情况是，你只需要部分代码变动（某几个提交），这时可以采用 Cherry pick。
+
+22.github fork & PR
+
+git config --system --unset credential.helper
+重新输入用户名密码
+-----------------------------------
+(2).git删除远程仓库的文件或目录
+git rm -r --cached a/2.txt //删除a目录下的2.txt文件   删除a目录git rm -r --cached a
+git commit -m "删除a目录下的2.txt文件" 
+git push
+
+查看本地仓库，对应的“远程仓库地址”:
+git remote -v
+
+删除这个远程仓库占用
+git remote rm origin
+
+使项目不受git管控：(前提是先没有与远程仓库关联，查看是否有与远程仓库关联：git remote -v，有则删除：git remote rm origin)
+find . -name ".git" | xargs rm -rf //其实就是删除项目目录下的.git文件夹
+
+------------------------------------
+git切换分支时会把未add或未commit的内容带过去， 这一点值得注意。
+为什么呢？
+因为未add的内容不属于任何一个分支， 未commit的内容也不属于任何一个分支。 也就是说，对于所有分支而言， 工作区和暂存区是公共的。
+
+------------------------------------
+代码提交一般有五个步骤：
+
+1.查看目前代码的修改状态：git status
+a)已暂存 （changes to be committed）
+new file //表示新建文件
+modified //表示修改文件
+deleted //表示删除文件
+b)已修改 （changed but not updated）
+modified //表示修改文件
+deleted //表示删除文件
+另外，git 给出了可能需要的操作命令，git add/rm, gitcheckout --
+c)未跟踪 （untracked files）
+
+2.查看代码修改内容(查看与最近提交节点的差异)
+git diff //查看所有没有暂存的修改(没有git add)
+git diff –cached //查看所有已经暂存的修改(已经git add)
+git diff  <file> //比较某文件与最近一次提交节点(commit)未暂存的修改
+注意：如果该文件已暂存，那么应该使用git diff –cached<file>
+
+git diff <hashcode> <hashcode>  <file>
+比较某文件在提交节点a，节点b的差异。
+技巧：如果省略后面一个hashcode，则默认表示与上一提交节点比较。（也可以利用^运算符）
+
+3.暂存需要提交的文件
+4.提交已暂存的文件
+5.同步到服务器
+------------------------------------
+(3).git分支管理
+查看本地分支：
+git branch
+查看远程分支：
+git branch -r
+查看所有分支：
+git branch -a
+
+新建一个本地的分支，并切换到该分支上去:
+git branch -b newbranch 
+新建本地分支：
+git branch branch1
+从远程分支origin/branch1下载代码，并且创建了一个本地的新分支branch1
+git checkout -b branch1 origin/branch1
+切换本地分支：
+git checkout branch1
+删除本地分支：
+git branch -d branch_name
+新建一个远程分支（同名字的远程分支），把本地分支关联远程分支，并且上传当前本地分支代码到远程分支:
+git push origin newbranch:newbranch
+删除远程分支
+git branch -r -d origin/branch-name  
+git push origin :branch-name //相当于把一个不存的的空的branch push到远程的分支，等价于删除
+远程已经删除的分支，在本地执行git branch -a显示还存在，执行以下命令可以清除
+git remote prune origin
+
+撤销所有未提交或未保存的更改
+git stash
+git stash drop
+
+注意区分仓库和分支
+origin是远程的仓库名，master是分支名，本地和远程都默认会有一个master分支，master就是local branch，origin/master是remote branch
+origin/master:表示远程仓库的master分支
+
+
+
+git push origin master
+origin指定了你要push到哪个remote(指定push到远程的哪个仓库)
+master其实是一个“refspec”，正常的“refspec”的形式为”+:”，冒号前表示local branch的名字，冒号后表示remote repository下 branch的名字。注意，如果你省略了，git就认为你想push到remote repository下和local branch相同名字的branch。听起来有点拗口，再解释下，push是怎么个push法，就是把本地branch指向的commit push到remote repository下的branch，比如
+$git push origin master:master (在local repository中找到名字为master的branch，使用它去更新remote repository下名字为master的branch，如果remote repository下不存在名字是master的branch，那么新建一个)
+$git push origin master （省略了，等价于“git push origin master:master”）
+$git push origin :mybranch （删除远程分支：在origin repository里面查找mybranch，删除它。用一个空的去更新它，就相当于删除了）
+
+以下讲的很好很细致：参考https://blog.csdn.net/hjh15827475896/article/details/89676587
+【
+git 新建本地分支并和远程分支的关联的创建与修改
+在一次项目开发中，因为项目小，且还没有上线，三个人开发，使用的 gitoschina，的一个代码库，所以当时就创建了一个master主分支，没有任何其它的分支，但是当项目即将上线的时候，显然一个master分支是不行了，所以这时要创建一个dev分支，用来进行测试开发。
+
+现在就来说一说怎么创建新的分支  
+
+1.创建一个本地分支（在master上打开 git命令行）
+
+  git checkout -b dev   //这个命令的意思是 切换当前分支到 dev分支上 ，如果dev 分支不存在，则创建新的 dev 分支（注意：是本地分支）
+
+创建了本地分支，可以使用 git branch -vv 来查看本地分支与远程分支的关系，可以看到本地的 dev分支没有和远程对应的分支
+
+2.此时直接 使用 git push 推送到远程，这里远程仓库就会自动为你创建一个 远程分支 origin/dev 并且把这个远程分支和你的当前的本地分支 dev 进行关联
+
+这样就完成了创建并关联一个远程分支，
+
+（但这样有很多局限性，项目开发不是一个人的，因为是我创建了本地分支再push所以我的git 可以自动为我关联远程分支，那么我的团队成员该如何操作呢）
+
+现在在团队其它成员的电脑上操作
+
+1.创建一个本地分支dev
+
+   git checkout -b dev
+
+2.使用git branch -a 查看分支   这时可以看到，根本找不到 远程的新 的 origin/dev 分支
+
+3.这时使用 git fetch  更新远程仓库的更改到本地  然后再使用 git branch -a 查看，就可以看到 origin/dev分支了
+
+4.这时再用命令行建立 本地dev 和远程分支 origin/dev 的关系就可以了  用两种方法，任选一个
+
+   git branch -u origin/dev  或者使用    git branch --set-upstream-to origin/dev
+
+OK 这样搞定了
+顺便说一上 解除本地分支与远程分支关系的命令
+
+撤销本地分支与远程分支的映射关系
+
+git branch --unset-upstream
+】
+
+
+【
+想要本本地创建一个新的分支，并关联远程已经存在的分支。
+一般在一个分支下创建新的分支时，会把上个分支的内容copy到新分支中，如果我们不想要上个分支的内容，创建干净的分支并关联远程分支的话。
+git checkout -b 本地分支名  origin/远程分支名
+】
+
+
+
+实操演示：别的同事在远程创建了一个develop分支，我在本地创建了一个develop本地分支，如何将两者关联，如下：
+$ git branch
+* develop
+  master
+
+$ git branch -r
+  origin/HEAD -> origin/master
+  origin/master
+
+$ git fetch
+From http://10.0.55.82/bigdata/data_show
+ * [new branch]      develop    -> origin/develop
+
+$ git branch -r
+  origin/HEAD -> origin/master
+  origin/develop
+  origin/master
+
+$ git branch --set-upstream-to origin/develop  //本地当前已经切到develop分支，如果没有指向develop分支，需要 git checkout develop
+Branch 'develop' set up to track remote branch 'develop' from 'origin'.
+
+$ git branch -vv
+* develop 9362a8a [origin/develop] first commit
+  master  9362a8a [origin/master] first commit
+
+
+2.1 主分支Master
+首先，代码库应该有一个、且仅有一个主分支。所有提供给用户使用的正式版本，都在这个主分支上发布
+Git主分支的名字，默认叫做Master。它是自动建立的，版本库初始化以后，默认就是在主分支在进行开发。
+
+2.2 开发分支Develop
+主分支只用来分布重大版本，日常开发应该在另一条分支上完成。我们把开发用的分支，叫做Develop。
+这个分支可以用来生成代码的最新隔夜版本（nightly）。如果想正式对外发布，就在Master分支上，对Develop分支进行"合并"（merge）。
+Git创建Develop分支的命令：
+git checkout -b develop master
+
+将Develop分支发布到Master分支的命令：
+# 切换到Master分支
+git checkout master
+# 对Develop分支进行合并
+git merge --no-ff develop
+这里稍微解释一下，上一条命令的--no-ff参数是什么意思。默认情况下，Git执行"快进式合并"（fast-farward merge），会直接将Master分支指向Develop分支。
+使用--no-ff参数后，会执行正常合并，在Master分支上生成一个新节点。为了保证版本演进的清晰，我们希望采用这种做法。
+2.3 临时性分支
+前面讲到版本库的两条主要分支：Master和Develop。前者用于正式发布，后者用于日常开发。其实，常设分支只需要这两条就够了，不需要其他了。
+但是，除了常设分支以外，还有一些临时性分支，用于应对一些特定目的的版本开发。临时性分支主要有三种：
+    　　* 功能（feature）分支
+    　　* 预发布（release）分支
+    　　* 修补bug（fixbug）分支
+这三种分支都属于临时性需要，使用完以后，应该删除，使得代码库的常设分支始终只有Master和Develop。
+
+-----------------------------------------
+(4)git两个分支差异对比
+1 差集
+Git有double dot语法可以做这个事情：
+git log master..dev
+它会将所有在dev分支里而不在master分支里的所有commit列出来，这样我们就可以很容易的知道两个branch的差异。
+
+如果想查看所有在master分支里而不在dev分支里的差异，将两个branch变换顺序即可。
+
+还可以看看远程分支和本地分支的不同：
+git log origin/master..HEAD
+
+Git还有另外类似的语法可以做相同的事情，比如：
+git log master..HEAD
+git log ^master HEAD
+git log HEAD --not master
+这三个命令是一样的。
+后两个语法允许我们可以对比多个分支，如：
+git log master dev ^zhc_branch
+上述命令求出所有在master和dev有但zhc_branch没有的，即 master和dev的并集与zhc_branch的差集。
+2 全差(并集与交集的差集)
+有时候我们想看两个分支有哪些不同，即左差和右差的并集。我们可以使用triple double语法，如：
+git master...HEAD
+A
+B
+如果想列出来哪个commit是哪个分支的，可以使用--left-right参数。
+git --left-right master...HEAD
+< A
+> B
+我们就知道里A是在master里，B是在HEAD里。
+
+-----------------------------------------
+开发分支（dev）上的代码达到上线的标准后，要合并到 master 分支
+git checkout dev
+git pull
+git checkout master
+git merge dev
+git push -u origin master
+
+--------------忽略git已有的某个文件---------------------
+在使用git中，经常会遇到这样的情况：
+git仓库中有某个必要的配置文件，这个文件应该存在，但是在每个开发人员的本地都要对他进行修改。这就导致这个文件要被反复修改，容易冲突。要想不冲突，就要每个人提交前，都刻意不提交该文件，很是麻烦。
+一般我们这时候就会想到，用.gitignore来忽略这个文件，但是该文件是已经提交过的，并且对于工程是必要的，应该保存在git中的。.gitignore对于这种已提交过的文件是无能为力的。
+这时候，就需要使用` git update-index --skip-worktree `命令了。
+该命令的作用是，让git在搜索文件列表时，忽略某个文件，这样该文件即使有修改，git也不会关心。
+  1. #例子：
+  2. git update-index --skip-worktree /e/projects/hrt/iFinance/src/main/java/com/trust/iFinance/filter/JwtFilter.java
+使用这个命令，时间久了，可能会忘记自己忽略过哪些文件，这时候可以使用` git ls-files -v . | grep "^S" `命令找出来忽略过的文件。
+  3. #例子：
+  4. git ls-files -v . | grep "^S"
+  5.  
+  6. #输出：S src/main/java/com/trust/iFinance/filter/JwtFilter.java
+不想继续忽略该文件时，使用` git update-index --no-skip-worktree `命令，来让git不再忽略该文件。
+  7. #例子：
+  8. git update-index --no-skip-worktree
+  
+---------.gitignore不生效--------
+.gitignore文件只是ignore没有被staged(cached)文件，对于已经被staged文件，加入ignore文件时一定要先从staged移除。
+
+#忽略文件
+git rm --cached  dataShowClient/dist.zip
+#忽略文件夹
+git rm -r --cached  dataShowClient/.vscode
+
+git add .
+git commit -m "fixed untracked files"
+git push #同时，远程的这个忽略文件或目录也会被删除
+
+
+
+
+
+git fetch和git pull
+git add底层在做什么操作？从工作区add index 到本地仓库repository？
+  
+  
+  
+  
+取消某次合并
+git merge --abort #如果Git版本 >= 1.7.4
+git reset --merge #如果Git版本 >= 1.6.1
+Note: 在合并之前要保证没有未提交的文件，如果有未提交的文件但现在又不想提交，用stash命令暂存。
+
+暂存命令stash使用
+git stash #将本地修改暂时存储起来
+git stash list #查看暂存的信息
+git stash pop  #应用最近一次暂存的内容
+git stash apply stash@{1} #应用指定版本的暂存内容
+git stash clear  #清空暂存栈
+
+拉取maste分支后忘记切换分支直接修改了很多代码，但是又想换个分支不影响master:
+git stash #将当前修改暂存起来
+git status #查看当前并无任何修改，与刚开始拉下来的代码一致
+git checkout -b new_br #以master的原来的代码为基础，创建一个新分支new_br
+git stash popo #将最近一次暂存的修改弹出到当前分支
+
+
+回退到某个版本并应用指定的几次提交
+git reset --hard 1d7444 #回退到某个版本
+git cherry-pick 626335 #将某次commit的更改应用到当前版本
+git cherry-pick …
+git push origin HEAD --force  #强制提交
+
+Note：如果是撤销某次提交，可以用revert命令，git revert是生成一个新的提交来撤销某次提交，此次提交之前的commit都会被保留; 
+git reset是回到某次提交，提交及之前的commit都会被保留，但是此次之后的修改都会被退回到暂存区
+
+ 
+-----------git撤销：放弃本地修改-----------------
+https://www.cnblogs.com/qufanblog/p/7606105.html
+
+如果在修改时发现修改错误，而要放弃本地修改时(根据修改文件的状态：工作区、暂存区、本地仓库，分为以下3种情况):
+一，未使用 git add 缓存代码时。
+可以使用 git checkout -- filepathname (比如： git checkout -- readme.md  ，不要忘记中间的 “--” ，不写就成了检出分支了！！)。放弃所有的文件修改可以使用 git checkout .  命令。
+此命令用来放弃掉所有还没有加入到缓存区（就是 git add 命令）的修改：内容修改与整个文件删除。但是此命令不会删除掉刚新建的文件。因为刚新建的文件还没已有加入到 git 的管理系统中。所以对于git是未知的。自己手动删除就好了。
+
+二，已经使用了git add 缓存了代码。
+可以使用  git reset HEAD filepathname （比如： git reset HEAD readme.md）来放弃指定文件的缓存，放弃所有的缓存可以使用 git reset HEAD . 命令。
+此命令用来清除 git  对于文件修改的缓存。相当于撤销 git add 命令所做的工作。在使用本命令后，本地的修改并不会消失，而是回到了如（一）所示的状态。继续用（一）中的操作，就可以放弃本地的修改。
+
+三，已经用 git commit  提交了代码。
+可以使用 git reset --hard HEAD^ 来回退到上一次commit的状态。此命令可以用来回退到任意版本：git reset --hard  commitid 
+你可以使用 git log 命令来查看git的提交历史。git log 的输出如下,之一这里可以看到第一行就是 commitid：
+复制代码
+commit cf0d692e982d8e372a07aaa6901c395eec73e356 (HEAD -> master)
+Author: toyflivver <2440659688@qq.com>
+Date: Thu Sep 28 14:07:14 2017 +0800
+多余的空行
+commit 14aa4d7ad4ac6fba59b4b8261d32e478e8cc99ff
+Author: toyflivver <2440659688@qq.com>
+Date: Thu Sep 28 14:06:44 2017 +0800
+正常的代码
+commit da3a95c84b6a92934ee30b6728e258bcda75f276
+Author: toyflivver <2440659688@qq.com>
+Date: Thu Sep 28 13:58:12 2017 +0800
+qbf
+commit 267466352079296520320991a75321485224d6c6
+Author: toyflivver <2440659688@qq.com>
+Date: Thu Sep 28 13:40:09 2017 +0800
+qbf
+复制代码
+可以看出现在的状态在 commitid 为 cf0d692e982d8e372a07aaa6901c395eec73e356 的提交上（有HEAD -> master标记）。
+
+
+-----------------HEAD指针-------------------
+参考：https://www.zsythink.net/archives/3412/
+使用”git log --oneline --all --graph”命令可以在命令行中以字符的形式尽量接近图形化的方式展示分支
+
+Git中的分支本质上是个指向commit对象的指针，当我们在某个分支上创建新的提交commit时，分支指针总是会指向当前分支的最新提交。
+
+Git保存着一个名为HEAD的特别指针，HEAD指针分以下两种情况：
+1.“通常情况下”，HEAD总是指向当前所在的分支（即指向当前分支的分支指针）。
+HEAD指向你正在工作中的本地分支的指针(分支本身也是指向commit对象的指针，那此时HEAD就是指针的指针)，所以通常情况可以通过查看HEAD指针找到我们所在的分支（的分支指针）。
+通常情况：HEAD指针 ——–> 分支指针 ——–> 最新提交
+
+2.”分离头”（detached HEAD）：HEAD指针没有指向分支指针，而是直接指向了某个提交，即HEAD指针（头指针）和分支指针分开，叫做分离头指针。
+如何进入到分离头的状态？
+当我们直接检出一个提交（而不是检出某个分支），就可以进出分离头状态。我们使用git checkout命令都是检出某个分支，那么我们直接git checkout commitID，即可进入到分离头的状态。
+
+分离头的用途：
+当你想要基于某个提交进行一些实验或者测试，可以直接检出这个提交git checkout commitID，立马在上面开始实验/测试工作，如果结果满意，就保留，如果结果不满意，就丢弃。
+你可能会说，我直接基于指定的提交创建一个新的分支，然后在新的分支上进行实验不是也可以吗？是的，完全可以，没有任何问题，只是，如果实验结果不满意，你可能还想要删除这条用于实验的分支，而使用分离头，就可以先实验，再判断是否保留这些提交，避免了在不满意的情况下创建分支或者删除分支的操作。
+
+git中用来操作HEAD指针的命令有:
+1. git checkout
+2.git reset 用于移动HEAD指针指向的commit点（如HEAD指针指向了分支，分支也会移动），但git reset 不会切换分支（注意和checkout的区别）
+reset 的几种模式：
+1）--soft：缓存区和工作目录不受影响。reset后分支和HEAD指针移动到指定的commit,代码文件内容和reset之前一样，修改部分已加入到暂存区。通常用于重新提交。
+2）--mixed：（默认）工作目录不受影响。reset后分支和HEAD指针移动到指定位置，代码文件内容和reset之前一样，修改部分未加入到暂存区。（需要重新执行git add）
+3）--hard：工作目录，缓存区均受影响。reset后分支和HEAD指针移动到指定commit,代码文件内容回退到指定commit，工作空间为clean状态。通常用于获取指定版本的代码文件。  
+
+  
+----------------冲突----------------
+<<<<<<< HEAD
+本地代码
+=======
+拉下来的代码
+>>>>>>>
+
+根据需要删除代码，然后把<<<<<<<    =======      >>>>>>都删掉冲突就解决了  
+  
+
+--------------------------------------------
+git启动双因子认证：https://blog.csdn.net/omage/article/details/106739590
+  
+快速关联/修改 Git 远程仓库地址：https://www.jianshu.com/p/4771c39a081e
+git服务器迁移，本地项目需要修改关联的远程仓库：
+方法一、
+git remote #查看远程仓库名称：origin
+git remote get-url origin #查看远程仓库地址；
+git remote set-url origin git@10.1.22.30:LauncherGroup/Launcher.git #( 如果未设置ssh-key，此处仓库地址为 http://... 开头)
+
+  
+  
